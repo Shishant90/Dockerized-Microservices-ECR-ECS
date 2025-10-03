@@ -1,12 +1,13 @@
-# Microservices Platform
+# Weather Forecast Microservices Platform
 
 [![Build Status](https://github.com/Shishant90/Dockerized-Microservices-ECR-ECS/workflows/CI/badge.svg)](https://github.com/Shishant90/Dockerized-Microservices-ECR-ECS/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
 ## Overview
 
-Enterprise-grade microservices platform built with Python FastAPI, containerized with Docker, and deployed on AWS ECS/ECR. This platform follows Domain-Driven Design (DDD) principles and implements clean architecture patterns for scalable, maintainable microservices.
+A production-ready microservices platform featuring a Weather Forecast API built with Python FastAPI. The platform implements Domain-Driven Design (DDD) principles, clean architecture patterns, and is containerized with Docker for AWS ECS/ECR deployment.
 
 ## Architecture
 
@@ -72,11 +73,10 @@ src/
 
 ### Prerequisites
 - Python 3.11+
-- Docker & Docker Compose
-- AWS CLI configured
+- Docker & Docker Compose (optional)
 - Git
 
-### Local Development Setup
+### Quick Start
 
 1. **Clone Repository**
    ```bash
@@ -84,22 +84,27 @@ src/
    cd Dockerized-Microservices-ECR-ECS
    ```
 
-2. **Environment Setup**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements-dev.txt
-   ```
-
-3. **Run Services Locally**
+2. **Option A: Run with Docker**
    ```bash
    docker-compose up --build
    ```
 
-4. **Access Services**
-   - Weather Service: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
-   - Health Check: http://localhost:8000/health
+3. **Option B: Run with Python (No Docker required)**
+   ```bash
+   cd src/service.weatherforecast
+   pip install -r requirements.txt
+   uvicorn WeatherForecast.Api.main:app --host 0.0.0.0 --port 8000 --reload
+   ```
+
+### Access the API
+- **Weather Service**: http://localhost:8000
+- **Interactive API Docs**: http://localhost:8000/docs
+- **Health Check**: http://localhost:8000/health
+- **Weather Endpoint**: http://localhost:8000/weather
+
+### Stop the Service
+- **Docker**: `docker-compose down`
+- **Python**: Press `Ctrl + C`
 
 ## Development Guidelines
 
@@ -177,17 +182,22 @@ aws ecs update-service --cluster production --service weather-service --force-ne
 - SOC 2 Type II controls
 - Regular security audits
 
-## API Documentation
+## API Endpoints
 
-### OpenAPI Specification
-- Interactive docs: `/docs`
-- ReDoc format: `/redoc`
-- OpenAPI JSON: `/openapi.json`
+### Available Endpoints
 
-### API Versioning
-- URL versioning: `/api/v1/`
-- Backward compatibility maintained
-- Deprecation notices for old versions
+| Method | Endpoint | Description | Response |
+|--------|----------|-------------|----------|
+| GET | `/` | Root endpoint | `{"message": "Weather Forecast Service"}` |
+| GET | `/health` | Health check | `{"status": "healthy"}` |
+| GET | `/weather` | Get weather data | `{"temperature": 22, "condition": "sunny"}` |
+| GET | `/docs` | Interactive API documentation | Swagger UI |
+| GET | `/redoc` | Alternative API documentation | ReDoc UI |
+
+### API Documentation
+- **Interactive Docs**: http://localhost:8000/docs
+- **ReDoc Format**: http://localhost:8000/redoc
+- **OpenAPI JSON**: http://localhost:8000/openapi.json
 
 ## Contributing
 
